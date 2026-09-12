@@ -1,0 +1,22 @@
+             Df Sum Sq Mean Sq F value Pr(>F)    
+species       2  52473   26237   594.8 <2e-16 ***
+Residuals   339  14953      44                   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+  Tukey multiple comparisons of means
+    95% family-wise confidence level
+
+Fit: aov(formula = flipper_length_mm ~ species, data = flip)
+
+$species
+                      diff       lwr       upr p adj
+Chinstrap-Adelie  5.869887  3.586583  8.153191     0
+Gentoo-Adelie    27.233349 25.334376 29.132323     0
+Gentoo-Chinstrap 21.363462 19.000841 23.726084     0
+
+
+	Kruskal-Wallis rank sum test
+
+data:  flipper_length_mm by species
+Kruskal-Wallis chi-squared = 244.89, df = 2, p-value < 2.2e-16
+

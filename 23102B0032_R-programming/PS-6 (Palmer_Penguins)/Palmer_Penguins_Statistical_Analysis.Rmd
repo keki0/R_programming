@@ -1,0 +1,116 @@
+---
+title: "Statistical Analysis of Physical Characteristics of Palmer Penguins"
+author: "Ketaki Patil"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    number_sections: true
+---
+
+# Introduction
+
+The Palmer Penguins dataset contains 344 observations from Adelie, Chinstrap and Gentoo penguins. This report investigates differences in body mass and flipper length across species and sex using descriptive statistics, hypothesis testing, effect size, ANOVA, Tukey HSD and Kruskal-Wallis tests.
+
+# Data and Packages
+
+```{r setup, message=FALSE, warning=FALSE}
+pkgs <- c('palmerpenguins','dplyr','ggplot2','moments','car')
+miss <- pkgs[!pkgs %in% rownames(installed.packages())]
+if(length(miss)) install.packages(miss, repos='https://cloud.r-project.org')
+lapply(pkgs, library, character.only=TRUE)
+penguins <- palmerpenguins::penguins
+```
+
+The dataset contains `r nrow(penguins)` observations.
+
+# Descriptive Statistics
+
+```{r desc}
+desc <- function(x){x<-x[!is.na(x)]; data.frame(N=length(x),Mean=mean(x),Median=median(x),Minimum=min(x),Maximum=max(x),Variance=var(x),SD=sd(x),Q1=quantile(x,.25,names=FALSE),Q3=quantile(x,.75,names=FALSE),IQR=IQR(x),Skewness=moments::skewness(x),Kurtosis=moments::kurtosis(x))}
+knitr::kable(round(desc(penguins$body_mass_g),3))
+species_desc <- penguins %>% group_by(species) %>% summarise(N=sum(!is.na(body_mass_g)),Mean=mean(body_mass_g,na.rm=T),Median=median(body_mass_g,na.rm=T),Minimum=min(body_mass_g,na.rm=T),Maximum=max(body_mass_g,na.rm=T),Variance=var(body_mass_g,na.rm=T),SD=sd(body_mass_g,na.rm=T),Q1=quantile(body_mass_g,.25,na.rm=T,names=F),Q3=quantile(body_mass_g,.75,na.rm=T,names=F),IQR=IQR(body_mass_g,na.rm=T),Skewness=moments::skewness(body_mass_g,na.rm=T),Kurtosis=moments::kurtosis(body_mass_g,na.rm=T),.groups='drop')
+knitr::kable(
+  species_desc %>%
+    mutate(across(where(is.numeric), ~ round(.x, 3)))
+)
+```
+
+# Visualizations
+
+```{r plots, fig.width=8, fig.height=5}
+ggplot(penguins,aes(body_mass_g))+geom_histogram(binwidth=250,na.rm=T)+labs(title='Distribution of Penguin Body Mass',x='Body Mass (g)',y='Frequency')+theme_minimal()
+ggplot(penguins,aes(species,body_mass_g,fill=species))+geom_boxplot(na.rm=T)+labs(title='Body Mass by Species',x='Species',y='Body Mass (g)')+theme_minimal()+theme(legend.position='none')
+ggplot(penguins,aes(sex,body_mass_g,fill=sex))+geom_boxplot(na.rm=T)+labs(title='Body Mass by Sex',x='Sex',y='Body Mass (g)')+theme_minimal()+theme(legend.position='none')
+ggplot(penguins,aes(body_mass_g,fill=species))+geom_density(alpha=.35,na.rm=T)+labs(title='Density Plot of Body Mass by Species',x='Body Mass (g)',y='Density')+theme_minimal()
+```
+
+# Male vs Female Body Mass
+
+**H0:** mean male body mass equals mean female body mass.  
+**H1:** mean male body mass differs from mean female body mass.
+
+```{r ttest}
+sexdat <- penguins %>% filter(!is.na(body_mass_g),!is.na(sex)) %>% droplevels()
+male <- sexdat$body_mass_g[sexdat$sex=='male']; female <- sexdat$body_mass_g[sexdat$sex=='female']
+shapiro.test(male); shapiro.test(female)
+par(mfrow=c(1,2)); qqnorm(male,main='Male QQ'); qqline(male); qqnorm(female,main='Female QQ'); qqline(female); par(mfrow=c(1,1))
+tt <- t.test(male,female,var.equal=FALSE,conf.level=.95); tt
+pooled_sd <- sqrt(((length(male)-1)*var(male)+(length(female)-1)*var(female))/(length(male)+length(female)-2))
+d <- (mean(male)-mean(female))/pooled_sd
+knitr::kable(data.frame(Male_Mean=mean(male),Female_Mean=mean(female),Difference=mean(male)-mean(female),CI_Low=tt$conf.int[1],CI_High=tt$conf.int[2],P_Value=tt$p.value,Cohens_d=d),digits=4)
+```
+
+# One-Way ANOVA
+
+The model is `body_mass_g ~ species`.
+
+```{r anova}
+anova_dat <- penguins %>% filter(!is.na(body_mass_g),!is.na(species)) %>% droplevels()
+anova_dat %>% group_by(species) %>% summarise(W=unname(shapiro.test(body_mass_g)$statistic),p=shapiro.test(body_mass_g)$p.value,.groups='drop')
+car::leveneTest(body_mass_g~species,data=anova_dat)
+m1 <- aov(body_mass_g~species,data=anova_dat); summary(m1)
+TukeyHSD(m1)
+```
+
+# Kruskal-Wallis Test
+
+```{r kw}
+kruskal.test(body_mass_g~species,data=anova_dat)
+```
+
+The ANOVA and Kruskal-Wallis conclusions are compared to determine whether the species effect is robust to the choice of statistical method.
+
+# Two-Way ANOVA
+
+The model `body_mass_g ~ species * sex` tests species, sex and the species-by-sex interaction.
+
+```{r twoway}
+two_dat <- penguins %>% filter(!is.na(body_mass_g),!is.na(species),!is.na(sex)) %>% droplevels()
+m2 <- aov(body_mass_g~species*sex,data=two_dat); summary(m2)
+shapiro.test(residuals(m2))
+car::leveneTest(body_mass_g~interaction(species,sex),data=two_dat)
+ggplot(two_dat,aes(species,body_mass_g,color=sex,group=sex))+stat_summary(fun=mean,geom='point',size=3)+stat_summary(fun=mean,geom='line')+stat_summary(fun.data=mean_cl_normal,geom='errorbar',width=.15)+labs(title='Mean Body Mass by Species and Sex',x='Species',y='Mean Body Mass (g)')+theme_minimal()
+```
+
+# Additional Analysis: Flipper Length
+
+```{r flipper}
+flip <- penguins %>% filter(!is.na(flipper_length_mm),!is.na(species)) %>% droplevels()
+fm <- aov(flipper_length_mm~species,data=flip); summary(fm)
+TukeyHSD(fm)
+kruskal.test(flipper_length_mm~species,data=flip)
+ggplot(flip,aes(species,flipper_length_mm,fill=species))+geom_boxplot()+labs(title='Flipper Length by Penguin Species',x='Species',y='Flipper Length (mm)')+theme_minimal()+theme(legend.position='none')
+```
+
+# Conclusion
+
+The statistical analysis shows that penguin body mass differs significantly by sex and species. Male penguins had a higher mean body mass (4545.69 g) than female penguins (3862.27 g). The independent-samples t-test showed a highly significant difference between the two groups (t = 8.555, p < 0.001). The 95% confidence interval for the mean difference was 526.25 g to 840.58 g, and Cohen's d was 0.936, indicating a large effect size.
+
+The one-way ANOVA showed a significant difference in body mass among Adelie, Chinstrap, and Gentoo penguins, F(2, 339) = 343.6, p < 0.001. Tukey's HSD showed that Gentoo penguins had significantly greater body mass than both Adelie and Chinstrap penguins, while the difference between Adelie and Chinstrap penguins was not significant. Levene's test indicated unequal variances across species, so the non-parametric Kruskal-Wallis test was also performed. It confirmed a significant difference among species (χ²(2) = 217.599, p < 0.001).
+
+The two-way ANOVA found significant effects of species and sex on body mass, as well as a significant species × sex interaction (p < 0.001). This indicates that the effect of sex on body mass differs across species.
+
+Flipper length also differed significantly among the three species. One-way ANOVA showed a significant species effect, F(2, 339) = 594.8, p < 0.001. Tukey's HSD indicated significant differences between every pair of species. The Kruskal-Wallis test also confirmed a significant difference in flipper length among species (χ²(2) = 244.89, p < 0.001).
+
+Overall, the analysis demonstrates clear differences in physical characteristics among penguin species, with Gentoo penguins generally having greater body mass and longer flippers than Adelie and Chinstrap penguins.

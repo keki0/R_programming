@@ -1,0 +1,11 @@
+             Df    Sum Sq  Mean Sq F value Pr(>F)    
+species       2 146864214 73432107   343.6 <2e-16 ***
+Residuals   339  72443483   213698                   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Levene's Test for Homogeneity of Variance (center = median)
+       Df F value   Pr(>F)   
+group   2  5.1203 0.006445 **
+      339                    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1

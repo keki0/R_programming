@@ -1,0 +1,28 @@
+
+	Shapiro-Wilk normality test
+
+data:  male
+W = 0.92504, p-value = 1.227e-07
+
+
+	Shapiro-Wilk normality test
+
+data:  female
+W = 0.91931, p-value = 6.155e-08
+
+
+	Welch Two Sample t-test
+
+data:  male and female
+t = 8.5545, df = 323.9, p-value = 4.794e-16
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ 526.2453 840.5783
+sample estimates:
+mean of x mean of y 
+ 4545.685  3862.273 
+
+  male_mean female_mean difference        t       df            p   CI_low
+1  4545.685    3862.273   683.4118 8.554537 323.8959 4.793891e-16 526.2453
+   CI_high  Cohens_d
+1 840.5783 0.9362048

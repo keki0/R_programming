@@ -1,0 +1,17 @@
+             Df    Sum Sq  Mean Sq F value   Pr(>F)    
+species       2 145190219 72595110 758.358  < 2e-16 ***
+sex           1  37090262 37090262 387.460  < 2e-16 ***
+species:sex   2   1676557   838278   8.757 0.000197 ***
+Residuals   327  31302628    95727                     
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+	Shapiro-Wilk normality test
+
+data:  residuals(model2)
+W = 0.99776, p-value = 0.9367
+
+Levene's Test for Homogeneity of Variance (center = median)
+       Df F value Pr(>F)
+group   5  1.3908 0.2272
+      327               
