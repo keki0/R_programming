@@ -1,0 +1,16 @@
+     invoiceno          stockcode         description        quantity           invoicedate                    unitprice         
+ Length   :541909   Length   :541909   Length   :541909   Min.   :-80995.000   Min.   :2010-12-01 08:26:00   Min.   :-11062.060  
+ N.unique : 25900   N.unique :  4070   N.unique :  4224   1st Qu.:     1.000   1st Qu.:2011-03-28 11:34:00   1st Qu.:     1.250  
+ N.blank  :     0   N.blank  :     0   N.blank  :  1454   Median :     3.000   Median :2011-07-19 17:17:00   Median :     2.080  
+ Min.nchar:     6   Min.nchar:     1   Min.nchar:    NA   Mean   :     9.552   Mean   :2011-07-04 13:34:57   Mean   :     4.611  
+ Max.nchar:     7   Max.nchar:    12   Max.nchar:    NA   3rd Qu.:    10.000   3rd Qu.:2011-10-19 11:27:00   3rd Qu.:     4.130  
+                                                          Max.   : 80995.000   Max.   :2011-12-09 12:50:00   Max.   : 38970.000  
+                                                                                                                                 
+   customerid          country      
+ Min.   :12346    Length   :541909  
+ 1st Qu.:13953    N.unique :    38  
+ Median :15152    N.blank  :     0  
+ Mean   :15288    Min.nchar:     3  
+ 3rd Qu.:16791    Max.nchar:    20  
+ Max.   :18287                      
+ NAs    :135080                     

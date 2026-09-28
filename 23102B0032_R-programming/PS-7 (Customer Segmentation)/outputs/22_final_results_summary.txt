@@ -1,0 +1,25 @@
+CUSTOMER SEGMENTATION RESULTS
+============================
+
+Total customers: 4338 
+Number of clusters: 4 
+K-Means Silhouette Score: 0.2566 
+Hierarchical Silhouette Score: 0.2106 
+High-value cluster: 3 
+
+CLUSTER PROFILES
+# A tibble: 4 × 10
+  Cluster Customers Avg_Recency Avg_Frequency Avg_Monetary Avg_Transaction_Value Avg_Quantity Avg_Purchase_Frequency Value_Score
+  <fct>       <int>       <dbl>         <dbl>        <dbl>                 <dbl>        <dbl>                  <dbl>       <dbl>
+1 1             917       260.           1.32         352.                  37.3         185.                  1.08       -2.72 
+2 2            1190        56.3          1.55         407.                  21.5         251.                  1.23       -0.785
+3 3             714        27.2         13.6         8488.                 272.         4860.                  1.68        3.62 
+4 4            1517        52.2          3.82        1332.                  27.9         800.                  0.554      -0.117
+# ℹ 1 more variable: Marketing_Strategy <chr>
+
+MODEL PERFORMANCE
+          Model  Accuracy Precision    Recall  F1_Score   ROC_AUC
+1 Random Forest 0.9826790 0.9774436 0.9154930 0.9454545 0.9984242
+2           SVM 0.9757506 1.0000000 0.8521127 0.9201521 0.9970236
+
+END OF EXPERIMENT
