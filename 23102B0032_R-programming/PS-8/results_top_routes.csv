@@ -1,0 +1,11 @@
+Pickup_Zone,Dropoff_Zone,Number_of_Trips
+Upper East Side South,Upper East Side North,14937
+Upper East Side North,Upper East Side South,12585
+Upper East Side South,Upper East Side South,11592
+Upper East Side North,Upper East Side North,9293
+Midtown Center,Upper East Side South,8544
+Upper East Side South,Midtown Center,8378
+JFK Airport,Outside of NYC,7796
+Upper East Side South,Midtown East,7068
+JFK Airport,JFK Airport,6546
+Midtown Center,Upper East Side North,6526

@@ -1,0 +1,7 @@
+# Large raw dataset
+PS-8/yellow_tripdata_2026-08.parquet
+
+# RStudio files
+.Rhistory
+.RData
+.Ruserdata

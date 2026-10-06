@@ -1,0 +1,3 @@
+Method,Execution_Time_Seconds,Speedup
+Sequential,0.159999999999997,1
+Parallel,25.15,0.00636182902584479

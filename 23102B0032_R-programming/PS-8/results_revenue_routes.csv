@@ -1,0 +1,11 @@
+Pickup_Zone,Dropoff_Zone,Total_Revenue,Number_of_Trips
+JFK Airport,Outside of NYC,979230.930000005,7796
+JFK Airport,Times Sq/Theatre District,536554.720000038,5590
+JFK Airport,JFK Airport,373585.050000004,6546
+LaGuardia Airport,Times Sq/Theatre District,361285.93,4588
+JFK Airport,Clinton East,262698.149999994,2749
+JFK Airport,Midtown South,256534.159999994,2632
+LaGuardia Airport,Midtown Center,235302.47,3115
+Upper East Side South,Upper East Side North,227039.240000003,14937
+LaGuardia Airport,Outside of NYC,225274.11,1573
+Times Sq/Theatre District,LaGuardia Airport,224691.03,2939
